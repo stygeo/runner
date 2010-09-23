@@ -16,7 +16,13 @@ module Runner
 					
 					self.create(options).tap do |task|
 						task.hook(:enqueue)
+						
+						task.perform_now
 					end
+				end
+				
+				def perform_now
+					TaskHandler.new(self)
 				end
 				
 				def payload_object=(object)
@@ -35,7 +41,8 @@ module Runner
 					if payload_object.respond_to? name
 						method = payload_object.method(name)
 						# If arity (required arguments) equals zero just call the method, otherwise pass arguments
-						method.arity == 0 : method.call : method.call(self, opts)
+						method.arity == 0 ? method.call : method.call(self, opts)
+					end
 				end
 			end
 		end
