@@ -24,7 +24,7 @@ module Runner
     
     class ConcurrencyThread
       def run(&block)
-        Thread.abort_on_exception = false
+        Thread.abort_on_exception = Runner.thread_abort_on_exception
         thread = Thread.new do
           block.call
         end
