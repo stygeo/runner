@@ -1,0 +1,28 @@
+== Runner
+
+Runner is a background task processor which is based on both spawn and delayed_job
+
+== Installation
+
+You can use the latest Rails 3 gem with the latest Runner gem:
+
+  gem install runner
+
+After you install Runner and add it to your Gemfile, you need to run the generator:
+
+  rails g runner
+
+This generates a Migration file so be sure to run
+
+  rake db:migrate
+ 
+
+== Getting started
+
+A Quick how to:
+
+  YourModelName.spawn.some_methodname to run in the background.
+  
+Unlike delayed_job you won't need any rake tasks which will run you background tasks. Calling spawn between your methods will force it to run in the background inside a fork.
+
+TODO Update this README file :)
