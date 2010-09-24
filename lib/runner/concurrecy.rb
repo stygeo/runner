@@ -1,8 +1,20 @@
 module Runner
+  class ConcurrencyHandlerError < StandardError
+  end
+  
   module Concurrency
     module Helper
       def concurrency(method = Runner.default_spawn_method, options = {}, &block)
-        klass = "Runner::Concurrency::Concurrency#{method.to_s.classify}".constantize
+        klass_name = "Runner::Concurrency::Concurrency#{method.to_s.classify}"
+        if defined? klass_name.constantize
+          klass = "Runner::Concurrency::Concurrency#{method.to_s.classify}".constantize
+        elsif Runner.raise_on_concurrency_handler_error
+          raise ConcurrencyHandlerError "Unable to load class Concurrency#{method.to_s.classify} which was specified as concurrency handler."
+        else
+          # Fall back to default fork
+          klass = ConcurrencyFork
+        end
+        
         instance = klass.new(options)
         instance.run(&block)
       end

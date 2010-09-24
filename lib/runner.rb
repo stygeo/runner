@@ -16,6 +16,9 @@ module Runner
   mattr_accessor :default_spawn_method
   @@default_spawn_method = :fork
   
+  mattr_accessor :raise_on_concurrency_handler_error
+  @@raise_on_concurrency_handler_error = false
+  
   def self.setup
     yield self
   end

@@ -28,7 +28,7 @@ module Runner
     
     def start_handlers
       @task_handlers.each do |task_handler|
-        concurrency(self.concurrency_method) do
+        concurrency(self.with) do
           # Restore connection for this fork
           TaskSpawner.restore_connection
             
