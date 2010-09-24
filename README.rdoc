@@ -4,9 +4,9 @@ Runner is a background task processor which is based on both spawn and delayed_j
 
 == Installation
 
-You can use the latest Rails 3 gem with the latest Runner gem:
+You can use the latest Rails 3 gem with the latest Runner gem and include it in your Gemfile:
 
-  gem install runner
+  gem 'runner', :git => 'git://github.com/stygeo/runner.git'
 
 After you install Runner and add it to your Gemfile, you need to run the generator:
 
