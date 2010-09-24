@@ -16,18 +16,22 @@ module Runner
 	end
 	
 	module Messaging
-		def spawn(options = {})
-			RunnerProxy.new(PerformableMethod, self, options)
+		def spawn(options = {}, &block)
+			if block_given?
+				# TODO
+			else
+				RunnerProxy.new(PerformableMethod, self, options)
+			end
 		end
 
 		module ClassMethods
 			def handle_asynch(method)
 				aliased_method, punctuation = method.to_s.sub(/[?!=]$/, ''), $1
-				with_method, without_method = "#{aliased_method}_with_runner#{punctuation}", "#{aliased_method}_without_delay#{punctuation}"
+				with_method, without_method = "#{aliased_method}_with_runner#{punctuation}", "#{aliased_method}_without_runner#{punctuation}"
 				define_method(with_method) do |*args|
 					spawn.__send__(without_method, *args)
 				end
-				alias_method_chain method, :spawn
+				alias_method_chain method, :runner
 			end
 		end
 	end

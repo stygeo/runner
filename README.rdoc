@@ -22,7 +22,7 @@ This generates a Migration file so be sure to run
 A Quick how to:
 
   YourModelName.spawn.some_methodname to run in the background.
-  
+
 Unlike delayed_job you won't need any rake tasks which will run you background tasks. Calling spawn between your methods will force it to run in the background inside a fork.
 
 TODO Update this README file :)

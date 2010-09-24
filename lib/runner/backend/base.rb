@@ -16,7 +16,7 @@ module Runner
 					
 					options.merge!(defaults)
 					options[:run_method] = options[:method] if options[:method]
-					options.delete(:run_method)
+					options.delete(:method)
 					
 					self.create(options).tap do |task|
 						task.hook(:enqueue)
@@ -40,15 +40,13 @@ module Runner
 			end
 			
 			def perform_now
-				handler = TaskHandler.new(:task => self)
-				spawner = TaskSpawner.new(:task_handler => handler)
+				spawner = TaskSpawner.new(:task => self, :amount_handlers => 1)
 
 				spawner.start_handlers
 			end
 			
 			def should_perform?
-				# Add logic, flag checks, etc.
-				true
+				run_method == TaskHandler::spawn_method
 			end
 			
 			# Called by TaskHandler#run which forks this process in the background

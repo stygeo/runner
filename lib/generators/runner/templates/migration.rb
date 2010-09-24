@@ -3,7 +3,7 @@ class CreateRunnerTasks < ActiveRecord::Migration
 		create_table :background_tasks, :force => true do |table|
 			table.integer		:priority, :default => 0				# Allows some jobs to jump to the front of the queue
 			table.integer		:attempts, :default => 0				# Provides for retries, but still fail eventually.
-			table.integer		:run_method, :default => 0			# The method in when this task should run. Imidiatly or delayed
+			table.text			:run_method												# The method in when this task should run. Imidiatly or delayed
 			table.text			:handler												# YAML-encoded string of the object that will do work
 			table.text			:last_error											# reason for last failure (See Note below)
 			table.datetime	:run_at													# When to run. Could be Time.zone.now for immediately, or sometime in the future.

@@ -11,9 +11,14 @@ module Runner
 		end
 		
 		def initialize(options = {})
-			@task_handlers = options[:task_handlers] || []
+			options.reverse_merge!({:amount_handlers => TaskSpawner::max_amount_task_handlers})
+			@task_handlers = Array.new
 			
-			@task_handlers << options[:task_handler] if options[:task_handler].present?
+			options[:amount_handlers].times do 
+				@task_handlers << TaskHandler.new
+			end
+
+			@task_handlers.first.task = options[:task] unless options[:task].blank?
 		end
 		
 		def start_handlers

@@ -6,16 +6,17 @@ require 'logger'
 
 module Runner
 	class TaskHandler
+		attr_accessor :task
 		cattr_accessor :spawn_method, :queue_method, :min_priority, :max_priority, :max_run_time, :logger
-		self.spawn_method = 0
-		self.queue_method = 1
+		self.spawn_method = :spawn
+		self.queue_method = :queue
 		self.max_run_time = 5.hours
 		
 		self.logger = if defined?(Rails)
-      Rails.logger
-    elsif defined?(RAILS_DEFAULT_LOGGER)
-      RAILS_DEFAULT_LOGGER
-    end
+			Rails.logger
+		elsif defined?(RAILS_DEFAULT_LOGGER)
+			RAILS_DEFAULT_LOGGER
+		end
 		
 		cattr_reader :backend
 		def self.backend=(backend)
@@ -23,6 +24,7 @@ module Runner
 				require "runner/backend/#{backend}"
 				backend = "Runner::Backend::#{backend.to_s.classify}::Task".constantize
 			end
+			
 			@@backend = backend
 			silence_warnings { ::Runner.const_set(:Task, backend) }
 		end
@@ -63,19 +65,19 @@ module Runner
 		
 		# Work off the tasks that will be given by lock_and_run
 		def work_off_tasks(num = 100)
-			success, failure = 0, 0
+			stats = {:success => 0, :failure => 0}
 			run.times do 
 				case lock_and_run_next_available_job
 				when true
-					success += 1
+					stats[:success] += 1
 				when false
-					failure += 1
+					stats[:failure] += 1
 				else
 					break # No work 
 				end
 			end
 			
-			return [success, failure]
+			return stats
 		end
 		
 		# Run 
@@ -121,8 +123,9 @@ module Runner
 		
 		def handle_failed_task(task, error)
 			task.last_error = [error.message, error.backtrace.join("\n")].join("\n")
-			task.save
 			log(task.last_error)
+			
+			task.save # TODO implement reschedule and move task.save to reschedule
 			# reschedule(task)
 		end
 	end
