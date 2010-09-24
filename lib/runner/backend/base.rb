@@ -44,7 +44,7 @@ module Runner
 			end
 			
 			def perform_now
-				spawner = TaskSpawner.new(:task => self, :amount_handlers => 1, :concurrency_method => concurrency_method)
+				spawner = TaskSpawner.new(:task => self, :amount_handlers => 1, :with => concurrency_method)
 				
 				spawner.start_handlers
 			end

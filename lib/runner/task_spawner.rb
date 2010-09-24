@@ -3,7 +3,7 @@ require 'active_record'
 
 module Runner
 	class TaskSpawner
-		attr_accessor :concurrency_method
+		attr_accessor :with
 		include Runner::Concurrency::Helper
 		
 		cattr_accessor :max_amount_task_handlers
@@ -21,7 +21,7 @@ module Runner
 				@task_handlers << TaskHandler.new
 			end
 			
-			self.concurrency_method = options[:concurrency_method] || Runner.default_spawn_method
+			self.with = options[:with] || Runner.default_spawn_method
 
 			@task_handlers.first.task = options[:task] unless options[:task].blank?
 		end
