@@ -17,10 +17,9 @@ module Runner
 					options.merge!(defaults)
 					options[:run_method] = options[:method] if options[:method]
 					options.delete(:method)
-					
+
 					self.create(options).tap do |task|
 						task.hook(:enqueue)
-						
 						task.perform_now if task.should_perform?
 					end
 				end
@@ -69,6 +68,11 @@ module Runner
 					# If arity (required arguments) equals zero just call the method, otherwise pass arguments
 					method.arity == 0 ? method.call : method.call(self, opts)
 				end
+			end
+			
+			protected
+			def set_default_run_at
+				self.run_at ||= self.class.db_time_now
 			end
 		end
 	end

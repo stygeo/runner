@@ -66,8 +66,8 @@ module Runner
 		# Work off the tasks that will be given by lock_and_run
 		def work_off_tasks(num = 100)
 			stats = {:success => 0, :failure => 0}
-			run.times do 
-				case lock_and_run_next_available_job
+			num.times do 
+				case lock_and_run_next_available_task
 				when true
 					stats[:success] += 1
 				when false
@@ -76,7 +76,7 @@ module Runner
 					break # No work 
 				end
 			end
-			
+			log(stats)
 			return stats
 		end
 		
@@ -84,6 +84,8 @@ module Runner
 		def run(task)
 			begin
 				task.invoke_task
+				log("Done running :)")
+				task.update_attribute(:finished, true)
 			rescue => e
 				handle_failed_task(task, e)
 			end
@@ -113,11 +115,11 @@ module Runner
 		end
 		
 		protected
-		def lock_and_run_next_available_job
+		def lock_and_run_next_available_task
 			task = Runner::Task.find_available_tasks(name, self.max_run_time).detect do |task|
-				return lockable?(name, task)
+				lockable?(task)
 			end
-			
+
 			run task if task
 		end
 		

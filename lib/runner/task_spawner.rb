@@ -4,7 +4,7 @@ require 'active_record'
 module Runner
 	class TaskSpawner
 		cattr_accessor :max_amount_task_handlers
-		self.max_amount_task_handlers = 5
+		self.max_amount_task_handlers = 1
 		
 		def self.restore_connection
 			::ActiveRecord::Base.establish_connection
