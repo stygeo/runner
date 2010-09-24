@@ -12,7 +12,7 @@ After you install Runner and add it to your Gemfile, you need to run the generat
 
   rails g runner
 
-This generates a Migration file so be sure to run
+This generates a Migration file and also an initializer file.
 
   rake db:migrate
  
@@ -21,7 +21,21 @@ This generates a Migration file so be sure to run
 
 A Quick how to:
 
-  YourModelName.spawn.some_methodname to run in the background.
+  Klass.spawn.some_method_name to run a class method in the background
+
+But of course instance methods are also possible to run in the background
+
+  klass = Klass.new
+  klass.spawn.some_method_name
+
+If don't want your method to be run immediately you can choose to queue to call in the database so it can be run at a later time
+
+  Klass.spawn(:method => :queue).some_method_name
+  # Somewhere else in the code you can invoke all queued calls with
+  c = Runner::TaskSpawner.new
+  c.start_handlers
+
+Please note the above code is for testing purpose. This is subject to change.
 
 Unlike delayed_job you won't need any rake tasks which will run you background tasks. Calling spawn between your methods will force it to run in the background inside a fork.
 
