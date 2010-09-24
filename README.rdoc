@@ -56,7 +56,7 @@ For queued tasks you could force the TaskSpawner to use a specific concurrency m
   c = Runner::TaskSpawner.new(:with => :fork)
   c.start_handlers # => Forces all tasks to be forked
 
-Please note the above code is for testing purpose. This is subject to change.
+Please note that queued calls are subject to chance.
 
 Unlike delayed_job you won't need any rake tasks which will run you background tasks. Calling spawn between your methods will force it to run in the background inside a fork.
 
