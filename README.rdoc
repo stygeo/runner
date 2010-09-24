@@ -23,12 +23,22 @@ A Quick how to:
 
   Klass.spawn.some_method_name to run a class method in the background
 
-But of course instance methods are also possible to run in the background
+Instance methods are also supported
 
   klass = Klass.new
   klass.spawn.some_method_name
 
-If don't want your method to be run immediately you can choose to queue to call in the database so it can be run at a later time
+If you've an instance method (class methods not yet supported) you also want to have run in the background at all times you could do the following:
+
+  class MyClass
+    def my_method
+      2 + 2
+    end
+    handle_asynch :my_method
+  end
+  c = MyClass.new; c.my_method # => my_method will run in the background.
+
+If don't want your method to be run immediately you can choose to queue the call, so it can be executed at a later time.
 
   Klass.spawn(:method => :queue).some_method_name
   # Somewhere else in the code you can invoke all queued calls with
