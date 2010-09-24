@@ -11,7 +11,7 @@ module Runner
         begin
           klass = "Runner::Concurrency::Concurrency#{method.to_s.classify}".constantize
         rescue => e
-          raise Runner::ConcurrencyHandlerError "Unable to load class Concurrency#{method.to_s.classify} which was specified as concurrency handler.\n#{e}" if Runner.raise_on_concurrency_handler_error
+          raise Runner::ConcurrencyHandlerError, "Unable to load class Concurrency#{method.to_s.classify} which was specified as concurrency handler.\n#{e}" if Runner.raise_on_concurrency_handler_error
         ensure
           # Fall back to default fork
           klass = ConcurrencyFork
