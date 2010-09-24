@@ -12,7 +12,7 @@ class CreateRunnerTasks < ActiveRecord::Migration
       table.timestamps
     end
 	
-    add_index :background_tasks, [:priority, :run_at], :name => 'delayed_jobs_priority'
+    add_index :background_tasks, [:priority, :run_at], :name => 'runner_tasks_priority'
   end
   
   def self.down

@@ -22,7 +22,7 @@ class RunnerGenerator < Rails::Generators::Base
   
   def create_migration_file
     if defined?(ActiveRecord)
-      migration_template 'migration.rb', 'db/migrate/create_runner_task.rb'
+      migration_template 'migration.rb', 'db/migrate/create_runner_tasks.rb'
     end
   end
 end
