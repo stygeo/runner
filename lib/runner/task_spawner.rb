@@ -3,6 +3,7 @@ require 'active_record'
 
 module Runner
 	class TaskSpawner
+		attr_accessor :concurrency_method
 		include Runner::Concurrency::Helper
 		
 		cattr_accessor :max_amount_task_handlers
@@ -19,13 +20,15 @@ module Runner
 			options[:amount_handlers].times do 
 				@task_handlers << TaskHandler.new
 			end
+			
+			self.concurrency_method = options[:concurrency_method] || Runner.default_spawn_method
 
 			@task_handlers.first.task = options[:task] unless options[:task].blank?
 		end
 		
 		def start_handlers
 			@task_handlers.each do |task_handler|
-				concurrency do
+				concurrency(self.concurrency_method) do
 					# Restore connection for this fork
 					TaskSpawner.restore_connection
 						

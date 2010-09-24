@@ -17,6 +17,11 @@ module Runner
 					options.merge!(defaults)
 					options[:run_method] = options[:method] if options[:method]
 					options.delete(:method)
+					
+					if options[:with]
+						options[:concurrency_method] = options[:with]
+						options.delete(:with)
+					end
 
 					self.create(options).tap do |task|
 						task.hook(:enqueue)
@@ -39,8 +44,8 @@ module Runner
 			end
 			
 			def perform_now
-				spawner = TaskSpawner.new(:task => self, :amount_handlers => 1)
-
+				spawner = TaskSpawner.new(:task => self, :amount_handlers => 1, :concurrency_method => concurrency_method)
+				
 				spawner.start_handlers
 			end
 			
