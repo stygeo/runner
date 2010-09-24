@@ -49,7 +49,7 @@ module Runner
 					affected_rows = if locked_by != worker
 						# Lock it if it's not locked by us yet
 						self.class.update_all(["locked_at = ?, locked_by = ?", now, worker],
-																	["id = ? AND (locked_at IS NULL OR locked_as < ?) AND (run_at <= ?)", id, (now - max_run_time.to_i), now])
+																	["id = ? AND (locked_at IS NULL OR locked_at < ?) AND (run_at <= ?)", id, (now - max_run_time.to_i), now])
 					else
 						# Did a worker crash?
 						self.class.update_all(["locked_at = ?", now], ["id = ? AND locked_by = ?", id, worker])
