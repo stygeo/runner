@@ -7,6 +7,7 @@ class CreateRunnerTasks < ActiveRecord::Migration
 			table.text			:run_method												# The method in when this task should run. Imidiatly or delayed
 			table.text			:handler												# YAML-encoded string of the object that will do work
 			table.text			:last_error											# reason for last failure (See Note below)
+			table.text			:concurrency_method							# If a concurrency method is given (yield, thread or fork) save it so we can use it when the object method is invoked
 			table.datetime	:run_at													# When to run. Could be Time.zone.now for immediately, or sometime in the future.
 			table.datetime	:locked_at											# Set when a client is working on this object
 			table.datetime	:failed_at											# Set when all retries have failed (actually, by default, the record is deleted instead)
