@@ -37,14 +37,14 @@ module Runner
         end
 
         # Set limit to 0 for unlimited
-        def self.find_available_tasks(task_handler_name, limit = 5, max_run_time = TaskHandler.max_run_time)
+        def self.find_available_tasks(task_handler_name, limit = Runner.task_limit, max_run_time = TaskHandler.max_run_time)
           scope = self.ready_to_run(task_handler_name, max_run_time)
           #scope = scope.where(["priority >= ?", TaskHandler.min_priority]) if TaskHandler.min_priority
           #scope = scope.whire(['priority <= ?', TaskHandler.max_priority]) if TaskHandler.max_priority
           
-          #::ActiveRecord::Base.silence do
+          ::ActiveRecord::Base.silence do
             scope.by_priority.all(:limit => limit) if limit
-          #end
+          end
         end
         
         def lock!(worker, max_run_time)

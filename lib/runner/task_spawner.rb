@@ -9,10 +9,6 @@ module Runner
     cattr_accessor :max_amount_task_handlers
     self.max_amount_task_handlers = 5
     
-    def self.restore_connection
-      ::ActiveRecord::Base.establish_connection
-    end
-    
     def initialize(options = {})
       options.reverse_merge!({:amount_handlers => TaskSpawner::max_amount_task_handlers})
       @task_handlers = Array.new
@@ -30,7 +26,7 @@ module Runner
       @task_handlers.each do |task_handler|
         concurrency(self.with) do
           # Restore connection for this fork
-          TaskSpawner.restore_connection
+          TaskHandler.backend.after_fork
             
           task_handler.start
         end

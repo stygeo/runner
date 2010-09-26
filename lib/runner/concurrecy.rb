@@ -17,8 +17,8 @@ module Runner
           klass = ConcurrencyFork
         end
         
-        instance = klass.new(options)
-        instance.run(&block)
+        concurrency_handler = klass.new(options)
+        concurrency_handler.run(&block)
       end
     end
     

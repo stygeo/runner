@@ -8,4 +8,7 @@ Runner.setup do |config|
   
   ## Abort all threads if one a thread raises an error. Default is false
   # config.thread_abort_on_exception = false
+  
+  ## Amount of task a task handler will process. Default is false
+  # config.task_limit
 end

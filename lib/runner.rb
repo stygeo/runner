@@ -25,6 +25,10 @@ module Runner
   mattr_accessor :thread_abort_on_exception
   @@thread_abort_on_exception = false
   
+  # Amount of task a task handler will process. Default is false
+  mattr_accessor :task_limit
+  @@task_limit = false
+  
   def self.setup
     yield self
   end
