@@ -1,7 +1,14 @@
 == Runner
 
 Runner is a background task processor which is based on both spawn and delayed_job
-Unlike delayed_job, Runner doesn't need a separate rake task which runs your background tasks
+Unlike delayed_job, Runner doesn't need a separate rake task which runs your background tasks.
+
+== Features
+* Easy way to implement other backends. Currently only supports ActiveRecord.
+* Convenient way to run methods as a separate process (see Quick-how-to).
+* Different concurrency methods supported (Forking, Threading and yielding)
+* Methods can be queued to be run at a later time giving you the option to run jobs at night by cron for example.
+* TaskSpawner which can be used to run queued tasks in the background.
 
 == Installation
 
@@ -47,7 +54,7 @@ If don't want your method to be run immediately you can choose to queue the call
 
   Klass.spawn(:method => :queue).some_method_name
 
-Somewhere else in your application you could do:
+Somewhere else in your application you could start up a task spawner which runs all tasks which are currently queued for running:
 
   c = Runner::TaskSpawner.new
   c.start_handlers
