@@ -1,6 +1,7 @@
 == Runner
 
 Runner is a background task processor which is based on both spawn and delayed_job
+Unlike delayed_job, Runner doesn't need a separate rake task which runs your background tasks
 
 == Installation
 
@@ -8,27 +9,31 @@ You can use the latest Rails 3 gem with the latest Runner gem and include it in 
 
   gem 'runner', :git => 'git://github.com/stygeo/runner.git'
 
-After you install Runner and add it to your Gemfile, you need to run the generator:
+After you installed Runner thru bundler, you need to run the generator:
 
   rails g runner
 
-This generates a Migration file and also an initializer file.
+The runner generator generates a Migration file and an initializer file. If you use migrations please run:
 
   rake db:migrate
- 
+
+Please refer to the Migration file if you rather set up your table your self.
 
 == Getting started
 
 A Quick how to:
 
-  Klass.spawn.some_method_name to run a class method in the background
+Running a task in the background is as easy as doing:
 
-Instance methods are also supported
+  Klass.spawn.some_method_name
+
+Instance methods are also supported:
 
   klass = Klass.new
   klass.spawn.some_method_name
 
-If you've an instance method (class methods not yet supported) you also want to have run in the background at all times you could do the following:
+If you'd like to have an instance method always run in the background you could use the handle_asynch class method.
+This forces the method to be run in the background no matter what:
 
   class MyClass
     def my_method
@@ -38,26 +43,28 @@ If you've an instance method (class methods not yet supported) you also want to 
   end
   c = MyClass.new; c.my_method # => my_method will run in the background.
 
-If don't want your method to be run immediately you can choose to queue the call, so it can be executed at a later time.
+If don't want your method to be run immediately you can choose to queue the call, which gives you the option to run it at a later time in the background:
 
   Klass.spawn(:method => :queue).some_method_name
-  # Somewhere else in the code you can invoke all queued calls with
+
+Somewhere else in your application you could do:
+
   c = Runner::TaskSpawner.new
   c.start_handlers
 
-If you would like to overwrite the default concurrency method you could pass :with to spawn for non-queued processes.
+If you would like to overwrite the default concurrency method you could pass :with to spawn for non-queued processes:
 
- Klass.spawn(:with => :thread).hello # => Forces the hello method to be executed in a thread rather than the default
+ Klass.spawn(:with => :thread).hello # => Forces the hello method to be executed in a thread rather than the default option.
 
 For queued tasks you could force the TaskSpawner to use a specific concurrency method
 
   Klass.spawn(:method => :queue, :with => :yield).some_method_name # => :with is ignored 
-  # Somewhere else in the code you can invoke all queued calls with
+
+Somewhere else in your application you could do:
+
   c = Runner::TaskSpawner.new(:with => :fork)
   c.start_handlers # => Forces all tasks to be forked
 
 Please note that queued calls are subject to chance.
-
-Unlike delayed_job you won't need any rake tasks which will run you background tasks. Calling spawn between your methods will force it to run in the background inside a fork.
 
 TODO Update this README file :)
