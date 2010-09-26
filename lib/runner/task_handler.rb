@@ -45,7 +45,7 @@ module Runner
     # may resume crashed/restart handlers.
     def name
       return @name unless @name.blank?
-      return "#{Process.pid}"
+      "[TaskHandler] pid:#{Process.pid} host:#{Socket.gethostnam}" rescue "[TaskHandler] pid:#{Process.pid}"
     end
     
     # Set the name of the worker.
@@ -109,7 +109,7 @@ module Runner
     end
     
     def log(text, level = Logger::INFO)
-      text = "[WorkHandler(#{name})] #{text}"
+      text = "[TaskHandler(#{name})] #{text}"
       puts text
       logger.add level, "#{Time.now.strftime('%FT%T%z')}: #{text}" if logger
     end
