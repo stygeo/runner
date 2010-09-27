@@ -38,6 +38,23 @@ Instance methods are also supported:
 
   klass = Klass.new
   klass.spawn.some_method_name
+  
+If you wish you may also use blocks instead of methods for spawn
+
+  class Klass
+    def my_method
+      2 + 2
+      spawn do
+        # Execute this long running block in the background
+      end
+    end
+  end
+  
+And of course you can just pass options to the spawn block
+
+  spawn(:with => :thread) do
+    # Execute
+  end
 
 If you'd like to have an instance method always run in the background you could use the handle_asynch class method.
 This forces the method to be run in the background no matter what:
