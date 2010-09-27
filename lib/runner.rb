@@ -29,6 +29,12 @@ module Runner
   mattr_accessor :task_limit
   @@task_limit = false
   
+  # Default serializer. Default options are :yaml and :marshal.
+  # If you'd like to pass your own serialization methods supply your own serialization class.
+  # Serialization requires load and dump. Dump should return the serialized objects and load should return a deserialized object.
+  mattr_accessor :serializer
+  @@serializer = :yaml
+  
   def self.setup
     yield self
   end

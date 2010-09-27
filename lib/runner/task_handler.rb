@@ -44,8 +44,8 @@ module Runner
       ::Runner.const_set(:Serializer, serializer)
     end
     
-    def self.default_serializer
-      self.serializer ||= :yaml
+    def self.load_serializer
+      self.serializer ||= ::Runner.serializer
     end
     
     # Instance methods

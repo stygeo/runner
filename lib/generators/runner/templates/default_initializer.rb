@@ -11,4 +11,9 @@ Runner.setup do |config|
   
   ## Amount of task a task handler will process. Default is false
   # config.task_limit
+  
+  ## Default serializer. Default options are :yaml and :marshal.
+  ## If you'd like to pass your own serialization methods supply your own serialization class.
+  ## Serialization requires load and dump. Dump should return the serialized objects and load should return a deserialized object.
+  # config.serializer
 end
