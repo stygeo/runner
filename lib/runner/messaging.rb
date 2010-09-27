@@ -18,7 +18,16 @@ module Runner
   module Messaging
     def spawn(options = {}, &block)
       if block_given?
-        # TODO
+        # Get a unique name
+        method_name = "anonymous_runner_method_#{Time.now.to_f}".gsub(".", "")
+        
+        self.class_eval do
+          define_method(method_name) do
+            yield
+          end
+        end
+        
+        spawn.__send__(method_name)
       else
         RunnerProxy.new(PerformableMethod, self, options)
       end

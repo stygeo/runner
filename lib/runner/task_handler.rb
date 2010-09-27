@@ -41,7 +41,7 @@ module Runner
       end
       
       @@serializer = serializer
-      ::Runner.const_set(:Serializer, serializer)
+      silence_warnings { ::Runner.const_set(:Serializer, serializer) }
     end
     
     def self.load_serializer

@@ -42,9 +42,9 @@ module Runner
           #scope = scope.where(["priority >= ?", TaskHandler.min_priority]) if TaskHandler.min_priority
           #scope = scope.whire(['priority <= ?', TaskHandler.max_priority]) if TaskHandler.max_priority
           
-          ::ActiveRecord::Base.silence do
+          #::ActiveRecord::Base.silence do
             scope.by_priority.all(:limit => limit) if limit
-          end
+          #end
         end
         
         def lock!(worker, max_run_time)
