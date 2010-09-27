@@ -5,11 +5,11 @@ module Runner
     module Marshal
       class Serializer
         def self.dump(data)
-          ActiveSupport::Base64.encode64(data)
+          ActiveSupport::Base64.encode64(::Marshal.dump(data))
         end
       
         def self.load(data)
-          Marshal.load(ActiveSupport::Base64.decode64(data))
+          ::Marshal.load(ActiveSupport::Base64.decode64(data))
         end
       end
     end
