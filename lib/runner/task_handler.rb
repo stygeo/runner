@@ -28,9 +28,24 @@ module Runner
       @@backend = backend
       silence_warnings { ::Runner.const_set(:Task, backend) }
     end
-
+    
     def self.guess_backend
       self.backend ||= :active_record if defined?(ActiveRecord)
+    end
+
+    cattr_reader :serializer
+    def self.serializer=(serializer)
+      if serializer.is_a? Symbol
+        require "runner/serialization/#{serializer}"
+        serializer = "Runner::Serialization::#{serializer.to_s.classify}::Serializer".constantize
+      end
+      
+      @@serializer = serializer
+      ::Runner.const_set(:Serializer, serializer)
+    end
+    
+    def self.default_serializer
+      self.serializer ||= :yaml
     end
     
     # Instance methods
@@ -45,7 +60,7 @@ module Runner
     # may resume crashed/restart handlers.
     def name
       return @name unless @name.blank?
-      "[TaskHandler] pid:#{Process.pid} host:#{Socket.gethostnam}" rescue "[TaskHandler] pid:#{Process.pid}"
+      "pid:#{Process.pid} host:#{Socket.gethostnam}" rescue "[TaskHandler] pid:#{Process.pid}"
     end
     
     # Set the name of the worker.

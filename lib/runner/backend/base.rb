@@ -34,11 +34,11 @@ module Runner
       def payload_object=(object)
         @payload_object = object
         # Serialize object
-        self.handler = object.to_yaml
+        self.handler = Runner::TaskHandler.serializer.dump(object)
       end
       
       def payload_object
-        @payload_object ||= YAML.load self.handler
+        @payload_object ||= Runner::TaskHandler.serializer.load(self.handler)
       rescue TypeError, LoadError, NameError => e
         raise DeserializeError, "Task failed to load: #{e.message}. Handler: #{handler.inspect}"
       end

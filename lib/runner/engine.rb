@@ -5,6 +5,7 @@ module Runner
   class Engine < Rails::Engine
     initializer "runner.guess_backend", :after => :initialize do
       Runner::TaskHandler.guess_backend
+      Runner::TaskHandler.default_serializer
     end
     
     rake_tasks do
