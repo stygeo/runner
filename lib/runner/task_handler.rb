@@ -60,7 +60,7 @@ module Runner
     # may resume crashed/restart handlers.
     def name
       return @name unless @name.blank?
-      "pid:#{Process.pid} host:#{Socket.gethostnam}" rescue "[TaskHandler] pid:#{Process.pid}"
+      "pid:#{Process.pid} host:#{Socket.gethostnam}" rescue "pid:#{Process.pid}"
     end
     
     # Set the name of the worker.
@@ -99,7 +99,6 @@ module Runner
     def run(task)
       begin
         task.invoke_task
-        log("Done running :)")
         task.update_attribute(:finished, true)
       rescue => e
         handle_failed_task(task, e)

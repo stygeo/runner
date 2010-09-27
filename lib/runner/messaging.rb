@@ -27,7 +27,7 @@ module Runner
           end
         end
         
-        spawn.__send__(method_name)
+        spawn(options).__send__(method_name)
       else
         RunnerProxy.new(PerformableMethod, self, options)
       end
