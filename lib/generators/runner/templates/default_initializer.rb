@@ -9,8 +9,8 @@ Runner.setup do |config|
   ## Abort all threads if one a thread raises an error. Default is false
   # config.thread_abort_on_exception = false
   
-  ## Amount of task a task handler will process. Default is false
-  # config.task_limit
+  ## Amount of task a task handler will process. Default is 5
+  # config.task_limit = 5
   
   ## Default serializer. Default options are :yaml and :marshal.
   ## If you'd like to pass your own serialization methods supply your own serialization class.
