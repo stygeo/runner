@@ -7,7 +7,7 @@ module Runner
         end
       
         def self.load(data)
-          Yaml.load data
+          YAML.load data
         end
       end
     end
