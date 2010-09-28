@@ -25,9 +25,9 @@ module Runner
   mattr_accessor :thread_abort_on_exception
   @@thread_abort_on_exception = false
   
-  # Amount of task a task handler will process. Default is false
+  # Amount of tasks a task handler will process.
   mattr_accessor :task_limit
-  @@task_limit = false
+  @@task_limit = 5
   
   # Default serializer. Default options are :yaml and :marshal.
   # If you'd like to pass your own serialization methods supply your own serialization class.
