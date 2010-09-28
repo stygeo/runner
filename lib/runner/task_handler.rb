@@ -72,7 +72,7 @@ module Runner
     # Start the worker
     def start
       if @task
-        return run_with_signle_task
+        return run_with_single_task
       else
         return result = work_off_tasks
       end
@@ -125,7 +125,6 @@ module Runner
     
     def log(text, level = Logger::INFO)
       text = "[TaskHandler(#{name})] #{text}"
-      puts text
       logger.add level, "#{Time.now.strftime('%FT%T%z')}: #{text}" if logger
     end
     
