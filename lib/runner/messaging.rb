@@ -32,6 +32,11 @@ module Runner
         RunnerProxy.new(PerformableMethod, self, options)
       end
     end
+    
+    def queue(options = {}, &block)
+      options.merge!({:method => :queue})
+      spawn(options, block)
+    end
 
     module ClassMethods
       def handle_asynch(method)
