@@ -28,23 +28,39 @@ module Runner
         }
         scope :by_priority, order('priority ASC, run_at ASC')
         
+        scope :locked_by, ->(task_handler_name) {
+          where :locked_by => task_handler_name
+        }
+        scope :available, ->(max_run_time){
+          flagged_for_run.where(['(run_at <= ? AND (locked_at IS NULL OR locked_at < ?)) AND failed_at IS NULL', db_time_now, db_time_now - max_run_time])
+        }
+        
         scope :ready_to_run, ->(task_handler_name, max_run_time) {
           flagged_for_run.where(['(run_at <= ? AND (locked_at IS NULL OR locked_at < ?) OR locked_by = ?) AND failed_at IS NULL', db_time_now, db_time_now - max_run_time, task_handler_name])
         }
+        
+        def self.before_fork
+          ::ActiveRecord::Base.clear_all_connections!
+        end
         
         def self.after_fork
           ::ActiveRecord::Base.establish_connection
         end
 
+        def self.find_available_tasks(task_handler_name, limit, max_run_time = TaskHandler.max_run_time)
+          warn "[DEPRECATION] `limit param in find_available_tasks` is deprecated."
+          self.find_available_tasks(task_handler_name, max_run_time)
+        end
+
         # Set limit to 0 for unlimited
-        def self.find_available_tasks(task_handler_name, limit = Runner.task_limit, max_run_time = TaskHandler.max_run_time)
+        def self.find_available_tasks(task_handler_name, max_run_time = TaskHandler.max_run_time)
           scope = self.ready_to_run(task_handler_name, max_run_time)
-          #scope = scope.where(["priority >= ?", TaskHandler.min_priority]) if TaskHandler.min_priority
-          #scope = scope.whire(['priority <= ?', TaskHandler.max_priority]) if TaskHandler.max_priority
+          scope = scope.where(["priority >= ?", TaskHandler.min_priority]) if TaskHandler.min_priority
+          scope = scope.whire(['priority <= ?', TaskHandler.max_priority]) if TaskHandler.max_priority
           
-          #::ActiveRecord::Base.silence do
-            scope.by_priority.all(:limit => limit) if limit
-          #end
+          ::ActiveRecord::Base.silence do
+            scope.by_priority.all(:limit => Runner.task_limit) if Runner.task_limit
+          end
         end
         
         def lock!(worker, max_run_time)
