@@ -72,10 +72,20 @@ module Runner
     # Start the worker
     def start
       if @task
-        return quick_run @task
+        return run_with_signle_task
       else
         return result = work_off_tasks
       end
+    end
+    
+    # Work off a single task. Method is used if TaskHandeler was initialized with a task.
+    def run_with_single_task
+      if lockable?(@task)
+        run(@task)
+        return true
+      end
+      
+      return false
     end
     
     # Work off the tasks that will be given by lock_and_run
@@ -91,7 +101,7 @@ module Runner
           break # No work 
         end
       end
-      log(stats)
+      log("Finished working off tasks. Finished with #{stats[:success]} successful and #{stats[:failure]} failed tasks.")
       return stats
     end
     
@@ -111,15 +121,6 @@ module Runner
       else
         return false
       end
-    end
-    
-    def quick_run(task)
-      if lockable?(task)
-        run(task)
-        return true
-      end
-      
-      return false
     end
     
     def log(text, level = Logger::INFO)
