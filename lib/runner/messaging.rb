@@ -35,7 +35,7 @@ module Runner
     
     def queue(options = {}, &block)
       options.merge!({:method => :queue})
-      spawn(options, block)
+      spawn(options, &block)
     end
 
     module ClassMethods
