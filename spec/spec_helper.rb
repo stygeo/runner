@@ -2,7 +2,6 @@ $:.unshift(File.dirname(__FILE__) + '/../lib')
 
 require 'rubygems'
 require 'bundler/setup'
-require 'spec'
 require 'logger'
 
 require 'active_record'
@@ -12,7 +11,8 @@ require 'runner'
 Runner::TaskHandler.logger = Logger.new('/tmp/runner_test.log')
 ENV['RAILS_ENV'] = 'test'
 
-ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':memory:')
+ActiveRecord::Base.configurations = {'test' => {:adapter => 'sqlite3', :database => ':memory:'}}
+ActiveRecord::Base.establish_connection
 ActiveRecord::Base.logger = Runner::TaskHandler.logger
 ActiveRecord::Migration.verbose = false
 
@@ -55,6 +55,7 @@ class Customer < ActiveRecord::Base
 end
 
 Runner::TaskHandler.backend = :active_record
+Runner::TaskHandler.serializer = :yaml
 
 # Add this directory so the ActiveSupport autoloading works
 ActiveSupport::Dependencies.autoload_paths << File.dirname(__FILE__)
