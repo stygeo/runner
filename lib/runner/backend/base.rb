@@ -40,7 +40,7 @@ module Runner
       def payload_object
         @payload_object ||= Runner::TaskHandler.serializer.load(self.handler)
       rescue TypeError, LoadError, NameError => e
-        raise DeserializeError, "Task failed to load: #{e.message}. Handler: #{handler.inspect}"
+        raise Runner::Backend::DeserializationError, "Task failed to load: #{e.message}. Handler: #{handler.inspect}"
       end
       
       def perform_now
