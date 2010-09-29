@@ -130,6 +130,7 @@ module Runner
     
     protected
     def lock_and_run_next_available_task
+      # Set the first available task and run it
       task = Runner::Task.find_available_tasks(name, self.max_run_time).detect do |task|
         lockable?(task)
       end

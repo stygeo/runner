@@ -9,6 +9,7 @@ module Runner
     cattr_accessor :max_amount_task_handlers
     self.max_amount_task_handlers = 5
     
+    attr_reader :task_handlers
     def initialize(options = {})
       @task_handlers = Array.new
       
