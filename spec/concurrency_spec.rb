@@ -1,4 +1,6 @@
-describe "concurrency" do
+require 'spec_helper'
+
+describe Runner::Concurrency do
   context "when I spawn a task" do
     before do
       @customer = Customer.new
@@ -35,10 +37,31 @@ describe "concurrency" do
     end
     
     context "with I specify an invalid concurrency method" do
-      context "and I config to raise on concurrency method" do
-        Runner.raise_on_concurrency_method_error = true
+      it "should use ConcurrencyFork by default" do
+        @forker = Runner::Concurrency::ConcurrencyFork.new
+        Runner::Concurrency::ConcurrencyFork.stub!(:new).and_return @forker
         
-        proc { @customer.spawn(:with => :invalid_concurrency_method, :method => :yield).empty_method }.should raise_exception(ConcurrencyHandlerError)
+        @forker.should_receive :run
+        task = @customer.spawn(:with => :invalid_concurrency_method).empty_method
+      end
+      
+      context "and I config to raise on concurrency handler" do
+        it "should raise an exception" do
+          Runner.raise_on_concurrency_handler_error = true
+          
+          Class.send(:include, Runner::Concurrency::Helper)
+          handler = Class.new
+          handler.instance_eval do
+            def test_raise
+              proc do
+                concurrency(:invalid_concurrency_method) do
+                  # Nothing
+                end
+              end
+            end
+          end
+          handler.test_raise.should raise_exception(Runner::ConcurrencyHandlerError)
+        end
       end
     end
   end

@@ -60,7 +60,7 @@ module Runner
     # may resume crashed/restart handlers.
     def name
       return @name unless @name.blank?
-      "pid:#{Process.pid} host:#{Socket.gethostnam}" rescue "pid:#{Process.pid}"
+      "pid:#{Process.pid} host:#{Socket.gethostname}" rescue "pid:#{Process.pid}"
     end
     
     # Set the name of the worker.
