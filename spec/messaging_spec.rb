@@ -70,44 +70,6 @@ describe Runner::Messaging do
           @customer.spawn(:with => :yield).do_error
         end
       end
-      
-      it "should create a new ConcurrencyForkClass and run" do
-        @yielder = Runner::Concurrency::ConcurrencyYield.new
-        Runner::Concurrency::ConcurrencyYield.stub!(:new).and_return @yielder
-        
-        @yielder.should_receive :run
-        task = @customer.spawn(:with => :yield).do_error
-      end
-    end
-    
-    context "with fork" do
-      it "should create a new ConcurrencyFork class and run" do
-        @forker = Runner::Concurrency::ConcurrencyFork.new
-        Runner::Concurrency::ConcurrencyFork.stub!(:new).and_return @forker
-        
-        @forker.should_receive :run
-        task = @customer.spawn(:with => :fork).do_error
-      end
-    end
-    
-    context "with thread" do
-      it "should create a new ConcurrencyThread class and run" do
-        @threader = Runner::Concurrency::ConcurrencyThread.new
-        Runner::Concurrency::ConcurrencyThread.stub!(:new).and_return @threader
-        
-        @threader.should_receive :run
-        task = @customer.spawn(:with => :thread).do_error
-      end
-    end
-    
-    context "with an invalid concurrency method specified" do
-      it "should revert back to default" do
-        @forker = Runner::Concurrency::ConcurrencyFork.new
-        Runner::Concurrency::ConcurrencyFork.stub!(:new).and_return @forker
-        
-        Runner::Concurrency::ConcurrencyFork.should_receive :new
-        @customer.spawn(:with => :invalid_concurrency_method).empty_method
-      end
     end
   end
 end
