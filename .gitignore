@@ -5,3 +5,4 @@ autotest
 tmp
 log
 *sqlite*
+coverage
