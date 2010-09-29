@@ -139,6 +139,8 @@ module Runner
     
     def handle_failed_task(task, error)
       task.last_error = [error.message, error.backtrace.join("\n")].join("\n")
+      task.failed_at = Time.now
+      
       log(task.last_error)
       
       task.save # TODO implement reschedule and move task.save to reschedule
