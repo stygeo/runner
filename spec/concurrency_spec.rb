@@ -20,7 +20,7 @@ describe "concurrency" do
         Runner::Concurrency::ConcurrencyFork.stub!(:new).and_return @forker
         
         @forker.should_receive :run
-        task = @customer.spawn(:with => :fork).do_error
+        task = @customer.spawn(:with => :fork).empty_method
       end
     end
     
@@ -30,7 +30,15 @@ describe "concurrency" do
         Runner::Concurrency::ConcurrencyThread.stub!(:new).and_return @threader
         
         @threader.should_receive :run
-        task = @customer.spawn(:with => :thread).do_error
+        task = @customer.spawn(:with => :thread).empty_method
+      end
+    end
+    
+    context "with I specify an invalid concurrency method" do
+      context "and I config to raise on concurrency method" do
+        Runner.raise_on_concurrency_method_error = true
+        
+        proc { @customer.spawn(:with => :invalid_concurrency_method, :method => :yield).empty_method }.should raise_exception(ConcurrencyHandlerError)
       end
     end
   end
