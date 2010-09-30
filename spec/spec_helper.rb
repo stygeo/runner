@@ -1,5 +1,12 @@
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 
+begin
+  require 'simplecov'
+  SimpleCov.start 'rails'
+rescue => e
+  puts "SimpleCov couldn't be found. Simplecov is a Ruby Coverage tool. Please run `gem install simplecov` if you'd like to see the code coverage."
+end
+
 require 'rubygems'
 require 'bundler/setup'
 require 'logger'
