@@ -60,7 +60,7 @@ module Runner
     # may resume crashed/restart handlers.
     def name
       return @name unless @name.blank?
-      "pid:#{Process.pid} host:#{Socket.gethostnam}" rescue "pid:#{Process.pid}"
+      "pid:#{Process.pid} host:#{Socket.gethostname}" rescue "pid:#{Process.pid}"
     end
     
     # Set the name of the worker.
@@ -130,6 +130,7 @@ module Runner
     
     protected
     def lock_and_run_next_available_task
+      # Set the first available task and run it
       task = Runner::Task.find_available_tasks(name, self.max_run_time).detect do |task|
         lockable?(task)
       end
@@ -139,6 +140,8 @@ module Runner
     
     def handle_failed_task(task, error)
       task.last_error = [error.message, error.backtrace.join("\n")].join("\n")
+      task.failed_at = Time.now
+      
       log(task.last_error)
       
       task.save # TODO implement reschedule and move task.save to reschedule

@@ -39,8 +39,15 @@ end
 
 # Purely useful for test cases...
 class Customer < ActiveRecord::Base
-  def error
+  def do_error
     raise "I raise an error"
+  end
+  
+  def empty_method
+  end
+  
+  def error
+
   end
   
   def tell
