@@ -57,12 +57,12 @@ describe Runner::Messaging do
   end
   
   it "should be able to queue" do
-    @customer.queue.class.should eq Runner::Backend::ActiveRecord::Task
+    @customer.queue.should be_instance_of(Runner::Backend::ActiveRecord::Task)
     sleep 0.2
   end
   
   it "should use concurrency for methods which are defined handle_asynch" do
-    @customer.say_n_times(2).class.should eq Runner::Backend::ActiveRecord::Task
+    @customer.say_n_times(2).should be_instance_of(Runner::Backend::ActiveRecord::Task)
     sleep 0.2
   end
   

@@ -47,11 +47,6 @@ module Runner
           ::ActiveRecord::Base.establish_connection
         end
 
-        def self.find_available_tasks(task_handler_name, limit, max_run_time = TaskHandler.max_run_time)
-          warn "[DEPRECATION] `limit param in find_available_tasks` is deprecated."
-          self.find_available_tasks(task_handler_name, max_run_time)
-        end
-
         # Set limit to 0 for unlimited
         def self.find_available_tasks(task_handler_name, max_run_time = TaskHandler.max_run_time)
           scope = self.ready_to_run(task_handler_name, max_run_time)

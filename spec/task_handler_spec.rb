@@ -38,7 +38,7 @@ describe Runner::TaskHandler do
     
     context "when a task is runned" do
       context "and when it fails to do so" do
-        it "should be handled" do
+        it "should be handled properly" do
           @task_handler.should_receive :handle_failed_task
           @task_handler.stub!(:handle_failed_task).and_return(true)
           
@@ -76,6 +76,17 @@ describe Runner::TaskHandler do
     it "to 'my new name' it should not reset to default" do
       @task_handler.name = "my new name"
       @task_handler.name.should eq "my new name"
+    end
+  end
+  
+  context "when no specific task is given" do
+    it "should handle the default amount of tasks" do
+      5.times {Customer.queue.class_method}
+      required = Runner::Backend::ActiveRecord::Task.available(5.hours).count - Runner.task_limit
+      task_handler = Runner::TaskHandler.new
+      task_handler.start
+      sleep 2
+      Runner::Backend::ActiveRecord::Task.available(5.hours).should have_at_most(required).items
     end
   end
 end
