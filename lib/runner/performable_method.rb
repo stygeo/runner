@@ -13,19 +13,19 @@ module Runner
     end
 
     def display_name
-      "#{object.class}##{method_name}"
+      "#{self.object.class}##{method_name}"
     end
 
     def perform
-      object.send(method_name, *args) if object
+      self.object.send(method_name, *args) if object
     end
 
     def method_missing(symbol, *args)
-      object.send(symbol, *args)
+      self.object.send(symbol, *args)
     end
 
     def respond_to?(symbol, include_private=false)
-      super || object.respond_to?(symbol, include_private)
+      super || self.object.respond_to?(symbol, include_private)
     end
   end
 end

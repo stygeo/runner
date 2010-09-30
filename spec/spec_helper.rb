@@ -3,7 +3,7 @@ $:.unshift(File.dirname(__FILE__) + '/../lib')
 begin
   require 'simplecov'
   SimpleCov.start 'rails'
-rescue => e
+rescue Exception => e
   puts "SimpleCov couldn't be found. Simplecov is a Ruby Coverage tool. Please run `gem install simplecov` if you'd like to see the code coverage."
 end
 
@@ -46,6 +46,9 @@ end
 
 # Purely useful for test cases...
 class Customer < ActiveRecord::Base
+  def self.class_method
+  end
+  
   def do_error
     raise "I raise an error"
   end
@@ -58,7 +61,7 @@ class Customer < ActiveRecord::Base
   end
   
   def tell
-    text
+    "hi"
   end
   
   def say_n_times(n, _)

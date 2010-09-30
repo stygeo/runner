@@ -6,6 +6,24 @@ describe Runner::Concurrency do
       @customer = Customer.new
     end
     
+    it "should run a thread when a ConcurrencyThread is used" do
+      threader = Runner::Concurrency::ConcurrencyThread.new
+      test_variable = nil
+      thread = threader.run do
+        test_variable = 1
+      end
+      thread.join
+      test_variable.should eq 1
+    end
+    
+    it "should run a fork when a ConcurrencyFork is used" do
+      forker = Runner::Concurrency::ConcurrencyFork.new
+      forker.run do
+        # This part isn't really testable to my knowledge because Process.detach is called on the child right after
+        # Which means the process is out of reach.
+      end
+    end
+    
     context "and I yield a method" do
       it "should use ConcurrencyYield" do
         @yielder = Runner::Concurrency::ConcurrencyYield.new

@@ -5,6 +5,26 @@ describe Runner::TaskHandler do
     @task_handler = Runner::TaskHandler.new
   end
   
+  it "should have a backend" do
+    Runner::TaskHandler.backend.should_not eq nil
+  end
+  
+  it "should have a serializer" do
+    Runner::TaskHandler.serializer.should_not eq nil
+  end
+  
+  it "should be able to guess a backend" do
+    Runner::TaskHandler.guess_backend.should_not eq nil
+  end
+  
+  it "should be able to load a serializer" do
+    Runner::TaskHandler.load_serializer.should_not eq nil
+  end
+  
+  it "should have a logger" do
+    Runner::TaskHandler.logger.should_not eq nil
+  end
+  
   context "when preloaded with a Task" do
     before do
       @task_handler.task = Runner::Task.new

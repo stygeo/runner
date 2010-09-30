@@ -37,6 +37,35 @@ describe Runner::Messaging do
     @customer = Customer.new
   end
   
+  context "spawn" do
+    it "should accept blocks" do
+      class Test
+        def hi
+        end
+        
+        def my_method
+          spawn(:with => :yield) do
+            hi
+          end
+        end
+      end
+      
+      test = Test.new
+      test.should_receive :hi
+      test.my_method
+    end
+  end
+  
+  it "should be able to queue" do
+    @customer.queue.class.should eq Runner::Backend::ActiveRecord::Task
+    sleep 0.2
+  end
+  
+  it "should use concurrency for methods which are defined handle_asynch" do
+    @customer.say_n_times(2).class.should eq Runner::Backend::ActiveRecord::Task
+    sleep 0.2
+  end
+  
   context "when creating a new runner proxy" do
     it "should return a new task" do
       task = Runner::RunnerProxy.new(Runner::PerformableMethod, String.new, {:method => :count})
