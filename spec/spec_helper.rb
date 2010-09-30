@@ -11,7 +11,7 @@ require 'runner'
 Runner::TaskHandler.logger = Logger.new('/tmp/runner_test.log')
 ENV['RAILS_ENV'] = 'test'
 
-ActiveRecord::Base.configurations = {'test' => {:adapter => 'sqlite3', :database => ':memory:'}}
+ActiveRecord::Base.configurations = {'test' => {:adapter => 'sqlite3', :database => 'test.sqlite3'}}
 ActiveRecord::Base.establish_connection
 ActiveRecord::Base.logger = Runner::TaskHandler.logger
 ActiveRecord::Migration.verbose = false
