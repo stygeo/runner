@@ -1,0 +1,4 @@
+infinity_test do
+  notifications :growl
+	use :test_framework => :rspec
+end
