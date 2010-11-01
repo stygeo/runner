@@ -8,7 +8,9 @@ Gem::Specification.new do |s|
   s.version = "0.1.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.date = %q{2010-09-29}
+  s.authors = ["Jeffrey Wilcke"]
+  s.date = %q{2010-11-01}
+  s.email = %q{stygeo@gmail.com}
   s.extra_rdoc_files = [
     "README.rdoc"
   ]
@@ -32,14 +34,20 @@ Gem::Specification.new do |s|
      "lib/runner/task_spawner.rb",
      "lib/runner/yaml_ext.rb"
   ]
+  s.homepage = %q{http://spicedcocoa.wordpress.com}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{Spawned processes for Rails 3}
+  s.summary = %q{Runner: A Rails 3 background worker based on delayed_job and spawn.}
   s.test_files = [
-    "spec/messaging_spec.rb",
+    "spec/active_record_spec.rb",
+     "spec/concurrency_spec.rb",
+     "spec/messaging_spec.rb",
      "spec/performable_method_spec.rb",
-     "spec/spec_helper.rb"
+     "spec/spec_helper.rb",
+     "spec/task_handler_spec.rb",
+     "spec/task_spawner_spec.rb",
+     "spec/yaml_serialization_spec.rb"
   ]
 
   if s.respond_to? :specification_version then
