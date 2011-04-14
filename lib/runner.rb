@@ -10,8 +10,6 @@ require File.dirname(__FILE__) + '/runner/task_handler'
 require File.dirname(__FILE__) + '/runner/engine' if defined? Rails && Rails::VERSION::MAJOR == 3
 
 ActionController::Base.send(:include, Runner::Messaging)
-  
-Object.send(:include, Runner::Messaging)
 Module.send(:include, Runner::Messaging::ClassMethods)
 
 module Runner
