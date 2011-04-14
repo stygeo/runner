@@ -86,3 +86,6 @@ module Runner
     end
   end
 end
+
+ActiveRecord::Base.send(:include, Runner::Messaging)
+ActiveRecord::Observer.send(:include, Runner::Messaging)
